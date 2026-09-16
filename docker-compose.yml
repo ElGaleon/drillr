@@ -1,0 +1,43 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-drillr}
+      POSTGRES_USER: ${POSTGRES_USER:-drillr}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-drillr_local_only}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - drillr_postgres:/var/lib/postgresql/data
+
+  api:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-drillr}:${POSTGRES_PASSWORD:-drillr_local_only}@db:5432/${POSTGRES_DB:-drillr}
+      CLERK_JWT_KEY: ${CLERK_JWT_KEY:-}
+      CLERK_ISSUER: ${CLERK_ISSUER:-}
+      DEV_AUTH_BYPASS: ${DEV_AUTH_BYPASS:-false}
+      DEV_USER_ID: ${DEV_USER_ID:-demo_user}
+      APP_ENV: ${APP_ENV:-local}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+        VITE_CLERK_PUBLISHABLE_KEY: ${VITE_CLERK_PUBLISHABLE_KEY:-}
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+
+volumes:
+  drillr_postgres:
