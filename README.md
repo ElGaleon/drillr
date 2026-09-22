@@ -1,12 +1,72 @@
+<div align="center">
+
 # Drillr
 
-MVP foundation for a coaching application: dashboard, player management, separate team selection, and settings.
+### Coaching operations, without the dashboard noise.
+
+Drillr è uno spazio operativo per coach e staff: roster, profili giocatore, valutazioni e contesto di squadra in un’unica interfaccia calma, compatta e pronta a crescere.
+
+<p>
+  <a href="#quick-start"><strong>Avvia la demo</strong></a> ·
+  <a href="#product-preview"><strong>Guarda le schermate</strong></a> ·
+  <a href="docs/architecture.md"><strong>Leggi l’architettura</strong></a>
+</p>
+
+![TypeScript](https://img.shields.io/badge/TypeScript-1d211d?style=flat-square&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-1d211d?style=flat-square&logo=react&logoColor=61DAFB)
+![FastAPI](https://img.shields.io/badge/FastAPI-1d211d?style=flat-square&logo=fastapi&logoColor=009688)
+![PostgreSQL ready](https://img.shields.io/badge/PostgreSQL-ready-1d211d?style=flat-square&logo=postgresql&logoColor=4169E1)
+![License](https://img.shields.io/badge/license-MIT-ec6a3d?style=flat-square)
+
+</div>
+
+<br />
+
+## Il prodotto
+
+Drillr parte da una domanda semplice: **come può uno staff prendere decisioni migliori sui giocatori, con meno attrito?**
+
+Il MVP costruisce una base affidabile per il lavoro quotidiano del coach:
+
+- una dashboard sintetica per capire subito lo stato della squadra;
+- un roster ricercabile con filtri, stati e accesso rapido ai profili;
+- profili giocatore completi, modificabili in pagine dedicate;
+- valutazioni append-only con storico e radar delle skill;
+- più squadre per account, con isolamento dei dati per proprietario e team;
+- un framework di skill, ruoli e test configurabile dalle impostazioni;
+- un design system responsive, accessibile e coerente.
+
+## Product preview
+
+Le anteprime sono asset locali versionabili, quindi funzionano anche quando il README viene letto offline o senza un deploy pubblico.
+
+<p align="center">
+  <img src="docs/screenshots/dashboard.svg" alt="Drillr dashboard preview" width="100%" />
+</p>
+
+<p align="center"><em>Una overview compatta: KPI del roster, giocatori recenti e prossimo step operativo.</em></p>
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/roster.svg" alt="Drillr player roster preview" width="100%" />
+      <p align="center"><em>Roster management</em></p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/player-profile.svg" alt="Drillr player profile and radar preview" width="100%" />
+      <p align="center"><em>Profilo giocatore e radar</em></p>
+    </td>
+  </tr>
+</table>
 
 ## Quick start
 
-### Local demo
+### Demo locale
+
+Servono Python 3.12+, Node.js e npm.
 
 ```bash
+# terminale 1 — API FastAPI
 cd backend
 python3 -m venv .venv
 source .venv/bin/activate
@@ -14,15 +74,14 @@ pip install -r requirements.txt
 DEV_AUTH_BYPASS=true uvicorn app.main:app --reload --port 8000
 ```
 
-In a second terminal:
-
 ```bash
+# terminale 2 — frontend Vite
 cd frontend
 npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173). When `VITE_CLERK_PUBLISHABLE_KEY` is not set, demo mode is displayed; the API creates a synthetic workspace and roster for `demo_user`.
+Apri [http://localhost:5173](http://localhost:5173). Senza una chiave Clerk configurata, Drillr mostra la demo locale e crea un workspace sintetico per `demo_user`.
 
 ### Docker Compose
 
@@ -30,32 +89,114 @@ Open [http://localhost:5173](http://localhost:5173). When `VITE_CLERK_PUBLISHABL
 DEV_AUTH_BYPASS=true docker compose up --build
 ```
 
-The stack starts PostgreSQL, the FastAPI API, and a static Nginx frontend. To use Clerk, set `VITE_CLERK_PUBLISHABLE_KEY`, `CLERK_JWT_KEY`, and `CLERK_ISSUER` in `.env`, then disable `DEV_AUTH_BYPASS`.
+Lo stack avvia PostgreSQL, API FastAPI e frontend statico servito da Nginx. Per usare Clerk, valorizza `VITE_CLERK_PUBLISHABLE_KEY`, `CLERK_JWT_KEY` e `CLERK_ISSUER` nel file `.env`, poi disabilita `DEV_AUTH_BYPASS`.
 
-## Included in the MVP
+> `DEV_AUTH_BYPASS` è solo per sviluppo locale. Non abilitarlo in staging o produzione.
 
-- Dashboard with roster KPIs and recent players.
-- Sidebar always available on desktop, expandable/collapsible, with a responsive mobile drawer.
-- Player list with search, status filtering, creation, editing, status-based archiving, and detail views.
-- Multiple teams per account, with data isolated through `owner_user_id` + `team_id`.
-- Active team settings and authentication/authorization documentation.
-- Coach-configurable skill framework with six default attack/defense parameters.
-- Append-only assessment and review history, rendered as a player radar chart with 1–10 half-step scoring and a dedicated snapshots view.
-- Full-page player profile creation/editing with personal, contact, sport, physical, availability, and medical context.
-- FastAPI + Pydantic v2 + SQLAlchemy + Alembic, PostgreSQL-ready.
-- Clerk configured as the authentication provider; demo bypass for local use only.
-- Reusable system design in `frontend/src/shared/theme.tsx`, with color, typography, radius, spacing, and elevation tokens.
+## Cosa include l’MVP
 
-## Project notes
+| Area | Funzionalità |
+| --- | --- |
+| Dashboard | KPI del roster, giocatori recenti, stato disponibilità e next step |
+| Players | Ricerca, filtro stato, creazione, modifica, archiviazione soft e dettaglio |
+| Player profile | Dati personali, sportivi, fisici, contatti, disponibilità e note staff |
+| Assessments | Sei parametri di default, score 1–10 a incrementi di 0,5, radar e storico |
+| Workspace | Più squadre per account con selezione persistente e dati isolati |
+| Settings | Skill framework, ruoli e catalogo test configurabili per squadra |
+| Access | Clerk JWT in produzione, bypass sintetico solo in demo locale |
+| Quality | Stati loading, empty, error e success; focus keyboard; layout responsive |
 
-Operational best practices, backend/frontend folder structure, and the backend/frontend/E2E testing strategy are documented in [AGENTS.md](AGENTS.md) and [docs/architecture.md](docs/architecture.md). The initial migration is in `backend/alembic/versions/0001_initial.py`; Docker applies it before starting the API.
+## Stack
 
-The system design documents the warm-neutral palette with a burnt-orange accent, DM Sans + Space Grotesk, spacing and radii in multiples of 4, responsive sidebar rules, and WCAG 2.2 AA contrast requirements. The React theme exposes `ThemeProvider`, `useTheme`, and `drillrTheme`: colors are defined in the theme constant and consumed through CSS variables, without hex/rgba values in components.
+**Frontend**
 
-Creation and edit forms use dedicated routes and full-page layouts; dialogs are reserved for confirmations and short non-form actions.
+- React + TypeScript + Vite
+- React Router
+- TanStack Query per lo stato server
+- React Hook Form + Zod per i form
+- Radix primitives e componenti UI locali in stile shadcn
+- DM Sans + Space Grotesk, con design tokens centralizzati
 
-## Structure and simplicity conventions
+**Backend**
 
-The backend follows the modular FastAPI organization: `app/main.py` assembles the application and includes domain-oriented `APIRouter` modules; dependencies, models, schemas, services, and repositories remain separate. The frontend follows a feature-oriented organization: `src/app` contains bootstrap, providers, and routing, `src/features` contains cohesive capabilities, and `src/shared` contains only reusable code independent of features.
+- FastAPI + Pydantic v2
+- SQLAlchemy + Alembic
+- SQLite in demo, PostgreSQL-ready per ambienti reali
+- Repository e service layer organizzati per dominio
+- Middleware per CORS, correlation ID, security headers e logging strutturato
 
-For operational details and folder tree examples, see [docs/architecture.md](docs/architecture.md). As cross-cutting rules, each file has one primary class or declaration, must not exceed 500 lines, and enums live in dedicated files/classes. Code must follow DRY, YAGNI, and KISS, avoiding both duplication and premature abstraction.
+## Architettura in breve
+
+```text
+drillr/
+├── frontend/
+│   └── src/
+│       ├── app/                 # bootstrap, provider e routing
+│       ├── features/            # dashboard, players, settings, workspace
+│       └── shared/              # layout, UI primitives, theme e utility
+├── backend/
+│   └── app/
+│       ├── routers/             # HTTP boundary per dominio
+│       ├── services/            # regole e orchestration
+│       ├── repositories/        # data access boundary
+│       ├── models/              # SQLAlchemy
+│       └── schemas/             # DTO Pydantic
+├── docs/
+│   ├── architecture.md
+│   ├── skill-framework.md
+│   ├── testing.md
+│   └── screenshots/             # preview locali per questo README
+└── docker-compose.yml
+```
+
+Il flusso applicativo resta intenzionalmente esplicito:
+
+```text
+React view → feature hook/service → API router → service → repository → database
+```
+
+Ogni query e mutazione di dominio è vincolata a `owner_user_id` e `team_id`. Le valutazioni e le review sono append-only: il valore corrente è l’ultima riga per giocatore e skill, mentre lo storico rimane disponibile.
+
+## Verifica locale
+
+```bash
+# backend
+cd backend
+pytest --cov=app --cov-report=term-missing
+
+# frontend
+cd frontend
+npm run lint
+npm run test
+npm run build
+```
+
+Per il percorso E2E previsto:
+
+```bash
+cd frontend
+npm run test:e2e -- --project=chromium
+```
+
+## Documentazione
+
+- [Architettura](docs/architecture.md)
+- [Skill framework e assessment history](docs/skill-framework.md)
+- [Testing strategy](docs/testing.md)
+- [Engineering guide](AGENTS.md)
+
+## Roadmap
+
+- [x] Dashboard e workspace multi-team
+- [x] Player CRUD e profili completi
+- [x] Skill framework e radar assessment
+- [x] Goals, reviews e athletic tests come moduli di dominio
+- [ ] Assessment comparison e trend più avanzati
+- [ ] Goal tracking operativo per staff e giocatore
+- [ ] Review workflow condiviso
+- [ ] Libreria esercizi e training plans
+- [ ] Auth production hardening e deploy osservabile
+
+## License
+
+Distribuito con licenza MIT. Vedi [LICENSE](LICENSE).

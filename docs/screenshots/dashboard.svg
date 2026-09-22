@@ -1,0 +1,58 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1440" height="900" fill="#F6F5F1"/>
+  <rect width="252" height="900" fill="#F2F2EC"/>
+  <path d="M251.5 0V900" stroke="#E5E4DC"/>
+  <g font-family="Arial, sans-serif">
+    <rect x="24" y="24" width="32" height="32" rx="8" fill="#1D211D"/>
+    <text x="34" y="47" fill="#FFFEFA" font-size="20" font-weight="700">d</text>
+    <text x="66" y="47" fill="#1D211D" font-size="22" font-weight="700" letter-spacing="-1.2">drill<tspan fill="#EC6A3D">r</tspan>.</text>
+    <rect x="18" y="88" width="216" height="60" rx="12" fill="#FFFEFA" stroke="#E5E4DC"/>
+    <circle cx="42" cy="118" r="18" fill="#EEEEE8"/>
+    <text x="34" y="123" fill="#7B817A" font-size="11" font-weight="700">PS</text>
+    <text x="72" y="115" fill="#1D211D" font-size="13" font-weight="700">Prima squadra</text>
+    <text x="72" y="132" fill="#7B817A" font-size="11">2025/26</text>
+    <g fill="#7B817A" font-size="13" font-weight="600">
+      <text x="54" y="198">Overview</text><text x="54" y="242">Players</text><text x="54" y="286">Assessments</text>
+      <text x="54" y="330">Reviews</text><text x="54" y="374">Athletic tests</text><text x="54" y="418">Settings</text>
+    </g>
+    <g stroke="#7B817A" stroke-width="1.8" stroke-linecap="round">
+      <path d="M27 194h15l-3 12H30l-3-12Z"/><path d="M28 240h14M30 236v8M40 236v8"/>
+      <circle cx="34" cy="282" r="8"/><path d="M34 278v8M30 282h8"/><path d="M28 326h13l-6-9v18"/>
+      <path d="M27 368h14v12H27zM30 368v-4h8v4"/><path d="M28 412h13M31 408v8M38 408v8"/>
+    </g>
+    <line x1="28" y1="472" x2="224" y2="472" stroke="#E5E4DC"/>
+    <circle cx="38" cy="838" r="16" fill="#1D211D"/><text x="31" y="843" fill="#FFFEFA" font-size="10" font-weight="700">AG</text>
+    <text x="64" y="836" fill="#1D211D" font-size="12" font-weight="700">Coach</text><text x="64" y="852" fill="#7B817A" font-size="10">Personal account</text>
+    <text x="296" y="64" fill="#A0A59E" font-size="10" font-weight="700" letter-spacing="1.5">OVERVIEW / TODAY</text>
+    <text x="296" y="112" fill="#1D211D" font-size="44" font-weight="700" letter-spacing="-2.6">Good morning, coach.</text>
+    <text x="296" y="143" fill="#7B817A" font-size="15">Here’s what is happening in Prima squadra.</text>
+    <rect x="1194" y="91" width="150" height="42" rx="8" fill="#EC6A3D"/>
+    <text x="1220" y="117" fill="#FFFEFA" font-size="13" font-weight="700">+  Add player</text>
+    <g>
+      <rect x="296" y="190" width="252" height="152" rx="12" fill="#FFFEFA" stroke="#E5E4DC"/>
+      <rect x="320" y="214" width="36" height="36" rx="8" fill="#EEEEE8"/><text x="329" y="238" fill="#1D211D" font-size="17">♙</text>
+      <text x="320" y="278" fill="#7B817A" font-size="12">Roster players</text><text x="320" y="313" fill="#1D211D" font-size="31" font-weight="700">10</text><text x="320" y="331" fill="#A0A59E" font-size="11">Total profiles</text>
+      <rect x="563" y="190" width="252" height="152" rx="12" fill="#FFFEFA" stroke="#E5E4DC"/>
+      <rect x="587" y="214" width="36" height="36" rx="8" fill="#EAF2EA"/><text x="596" y="238" fill="#497550" font-size="17">✓</text>
+      <text x="587" y="278" fill="#7B817A" font-size="12">Available</text><text x="587" y="313" fill="#1D211D" font-size="31" font-weight="700">9</text><text x="587" y="331" fill="#A0A59E" font-size="11">Ready to work</text>
+      <rect x="830" y="190" width="252" height="152" rx="12" fill="#FFFEFA" stroke="#E5E4DC"/>
+      <rect x="854" y="214" width="36" height="36" rx="8" fill="#FBE6DB"/><text x="863" y="238" fill="#CF512D" font-size="17">♡</text>
+      <text x="854" y="278" fill="#7B817A" font-size="12">Monitor</text><text x="854" y="313" fill="#1D211D" font-size="31" font-weight="700">1</text><text x="854" y="331" fill="#A0A59E" font-size="11">Injured players</text>
+      <rect x="1097" y="190" width="247" height="152" rx="12" fill="#FFFEFA" stroke="#E5E4DC"/>
+      <rect x="1121" y="214" width="36" height="36" rx="8" fill="#EEEBF7"/><text x="1131" y="238" fill="#7966A4" font-size="17">↗</text>
+      <text x="1121" y="278" fill="#7B817A" font-size="12">Last updated</text><text x="1121" y="313" fill="#1D211D" font-size="31" font-weight="700">Today</text><text x="1121" y="331" fill="#A0A59E" font-size="11">Data synced</text>
+    </g>
+    <rect x="296" y="364" width="690" height="420" rx="12" fill="#FFFEFA" stroke="#E5E4DC"/>
+    <text x="320" y="399" fill="#A0A59E" font-size="10" font-weight="700" letter-spacing="1.5">ROSTER</text><text x="320" y="430" fill="#1D211D" font-size="20" font-weight="700">Recent players</text><text x="890" y="430" fill="#CF512D" font-size="12" font-weight="700">See all  ↗</text>
+    <g font-size="13">
+      <line x1="320" y1="454" x2="962" y2="454" stroke="#E5E4DC"/>
+      <circle cx="343" cy="488" r="18" fill="#29312D"/><text x="332" y="493" fill="#FFFEFA" font-size="10" font-weight="700">LB</text><text x="375" y="485" fill="#1D211D" font-weight="700">Luca Bianchi</text><text x="375" y="503" fill="#7B817A" font-size="11">Playmaker</text><rect x="857" y="480" width="56" height="22" rx="11" fill="#EAF2EA"/><text x="869" y="495" fill="#497550" font-size="10" font-weight="700">Active</text><text x="940" y="495" fill="#A0A59E">↗</text>
+      <line x1="320" y1="523" x2="962" y2="523" stroke="#E5E4DC"/><circle cx="343" cy="558" r="18" fill="#202621"/><text x="335" y="563" fill="#FFFEFA" font-size="10" font-weight="700">AC</text><text x="375" y="555" fill="#1D211D" font-weight="700">Andrea Conti</text><text x="375" y="573" fill="#7B817A" font-size="11">Ala</text><rect x="857" y="550" width="64" height="22" rx="11" fill="#FBE6DB"/><text x="867" y="565" fill="#CF512D" font-size="10" font-weight="700">Injured</text><text x="940" y="565" fill="#A0A59E">↗</text>
+      <line x1="320" y1="593" x2="962" y2="593" stroke="#E5E4DC"/><circle cx="343" cy="628" r="18" fill="#303633"/><text x="335" y="633" fill="#FFFEFA" font-size="10" font-weight="700">DE</text><text x="375" y="625" fill="#1D211D" font-weight="700">Davide Esposito</text><text x="375" y="643" fill="#7B817A" font-size="11">Centro</text><rect x="857" y="620" width="56" height="22" rx="11" fill="#EAF2EA"/><text x="869" y="635" fill="#497550" font-size="10" font-weight="700">Active</text><text x="940" y="635" fill="#A0A59E">↗</text>
+      <line x1="320" y1="663" x2="962" y2="663" stroke="#E5E4DC"/><circle cx="343" cy="698" r="18" fill="#1D211D"/><text x="336" y="703" fill="#FFFEFA" font-size="10" font-weight="700">EP</text><text x="375" y="695" fill="#1D211D" font-weight="700">E2E Player</text><text x="375" y="713" fill="#7B817A" font-size="11">Forward</text><rect x="857" y="690" width="56" height="22" rx="11" fill="#EAF2EA"/><text x="869" y="705" fill="#497550" font-size="10" font-weight="700">Active</text><text x="940" y="705" fill="#A0A59E">↗</text>
+    </g>
+    <rect x="1000" y="364" width="344" height="420" rx="12" fill="#1D211D"/>
+    <text x="1028" y="399" fill="#B9C0B7" font-size="10" font-weight="700" letter-spacing="1.5">NEXT STEP</text><text x="1028" y="440" fill="#FFFEFA" font-size="21" font-weight="700">Build the team profile</text><text x="1028" y="485" fill="#B9C0B7" font-size="13">Add roles, measurements, and</text><text x="1028" y="505" fill="#B9C0B7" font-size="13">availability. The data foundation is</text><text x="1028" y="525" fill="#B9C0B7" font-size="13">ready for assessments and goals.</text>
+    <rect x="1028" y="614" width="288" height="7" rx="3.5" fill="#3D443D"/><rect x="1028" y="614" width="288" height="7" rx="3.5" fill="#EC6A3D"/><text x="1028" y="650" fill="#B9C0B7" font-size="11">Roster setup</text><text x="1280" y="650" fill="#FFFEFA" font-size="11" font-weight="700">100%</text><text x="1028" y="711" fill="#F79A79" font-size="12" font-weight="700">Open player management  ↗</text>
+  </g>
+</svg>
