@@ -1,10 +1,10 @@
 # Drillr
 
-Base MVP dell’applicativo di coaching: dashboard, gestione giocatori, selezione di più team separati e impostazioni.
+MVP foundation for a coaching application: dashboard, player management, separate team selection, and settings.
 
-## Avvio rapido
+## Quick start
 
-### Demo locale
+### Local demo
 
 ```bash
 cd backend
@@ -14,7 +14,7 @@ pip install -r requirements.txt
 DEV_AUTH_BYPASS=true uvicorn app.main:app --reload --port 8000
 ```
 
-In un secondo terminale:
+In a second terminal:
 
 ```bash
 cd frontend
@@ -22,7 +22,7 @@ npm install
 npm run dev
 ```
 
-Apri [http://localhost:5173](http://localhost:5173). In assenza di `VITE_CLERK_PUBLISHABLE_KEY` viene mostrata la modalità demo; l’API crea un workspace e una rosa sintetici per `demo_user`.
+Open [http://localhost:5173](http://localhost:5173). When `VITE_CLERK_PUBLISHABLE_KEY` is not set, demo mode is displayed; the API creates a synthetic workspace and roster for `demo_user`.
 
 ### Docker Compose
 
@@ -30,18 +30,32 @@ Apri [http://localhost:5173](http://localhost:5173). In assenza di `VITE_CLERK_P
 DEV_AUTH_BYPASS=true docker compose up --build
 ```
 
-Lo stack avvia PostgreSQL, API FastAPI e frontend statico Nginx. Per usare Clerk, valorizza `VITE_CLERK_PUBLISHABLE_KEY`, `CLERK_JWT_KEY` e `CLERK_ISSUER` nel file `.env`, quindi disattiva `DEV_AUTH_BYPASS`.
+The stack starts PostgreSQL, the FastAPI API, and a static Nginx frontend. To use Clerk, set `VITE_CLERK_PUBLISHABLE_KEY`, `CLERK_JWT_KEY`, and `CLERK_ISSUER` in `.env`, then disable `DEV_AUTH_BYPASS`.
 
-## MVP incluso
+## Included in the MVP
 
-- Dashboard con KPI della rosa e giocatori recenti.
-- Sidebar sempre disponibile su desktop, espandibile/collassabile e drawer responsive su mobile.
-- Lista giocatori con ricerca, filtro stato, creazione, modifica, archivio tramite stato e dettaglio.
-- Più team per account, con dati separati tramite `owner_user_id` + `team_id`.
-- Impostazioni del team attivo e documentazione auth/authz.
+- Dashboard with roster KPIs and recent players.
+- Sidebar always available on desktop, expandable/collapsible, with a responsive mobile drawer.
+- Player list with search, status filtering, creation, editing, status-based archiving, and detail views.
+- Multiple teams per account, with data isolated through `owner_user_id` + `team_id`.
+- Active team settings and authentication/authorization documentation.
+- Coach-configurable skill framework with six default attack/defense parameters.
+- Append-only assessment and review history, rendered as a player radar chart with 1–10 half-step scoring and a dedicated snapshots view.
+- Full-page player profile creation/editing with personal, contact, sport, physical, availability, and medical context.
 - FastAPI + Pydantic v2 + SQLAlchemy + Alembic, PostgreSQL-ready.
-- Clerk predisposto come provider di autenticazione; bypass demo solo in locale.
+- Clerk configured as the authentication provider; demo bypass for local use only.
+- Reusable system design in `frontend/src/shared/theme.tsx`, with color, typography, radius, spacing, and elevation tokens.
 
-## Note di progetto
+## Project notes
 
-Le best practice operative e la strategia di test backend/frontend/E2E sono in [AGENTS.md](AGENTS.md). La migrazione iniziale è in `backend/alembic/versions/0001_initial.py`; in Docker viene applicata prima dell’avvio dell’API.
+Operational best practices, backend/frontend folder structure, and the backend/frontend/E2E testing strategy are documented in [AGENTS.md](AGENTS.md) and [docs/architecture.md](docs/architecture.md). The initial migration is in `backend/alembic/versions/0001_initial.py`; Docker applies it before starting the API.
+
+The system design documents the warm-neutral palette with a burnt-orange accent, DM Sans + Space Grotesk, spacing and radii in multiples of 4, responsive sidebar rules, and WCAG 2.2 AA contrast requirements. The React theme exposes `ThemeProvider`, `useTheme`, and `drillrTheme`: colors are defined in the theme constant and consumed through CSS variables, without hex/rgba values in components.
+
+Creation and edit forms use dedicated routes and full-page layouts; dialogs are reserved for confirmations and short non-form actions.
+
+## Structure and simplicity conventions
+
+The backend follows the modular FastAPI organization: `app/main.py` assembles the application and includes domain-oriented `APIRouter` modules; dependencies, models, schemas, services, and repositories remain separate. The frontend follows a feature-oriented organization: `src/app` contains bootstrap, providers, and routing, `src/features` contains cohesive capabilities, and `src/shared` contains only reusable code independent of features.
+
+For operational details and folder tree examples, see [docs/architecture.md](docs/architecture.md). As cross-cutting rules, each file has one primary class or declaration, must not exceed 500 lines, and enums live in dedicated files/classes. Code must follow DRY, YAGNI, and KISS, avoiding both duplication and premature abstraction.

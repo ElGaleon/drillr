@@ -7,13 +7,19 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "lint": "tsc -b --pretty false"
+    "lint": "tsc -b --pretty false",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@clerk/react": "latest",
     "@hookform/resolvers": "latest",
     "@phosphor-icons/react": "latest",
     "@radix-ui/react-dialog": "latest",
+    "@radix-ui/react-dropdown-menu": "^2.1.24",
+    "@radix-ui/react-select": "^2.3.7",
     "@radix-ui/react-slot": "latest",
     "@tanstack/react-query": "latest",
     "class-variance-authority": "latest",
@@ -26,12 +32,19 @@
     "zod": "latest"
   },
   "devDependencies": {
+    "@playwright/test": "latest",
     "@tailwindcss/vite": "latest",
+    "@testing-library/jest-dom": "latest",
+    "@testing-library/react": "latest",
+    "@testing-library/user-event": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@vitejs/plugin-react": "latest",
+    "@vitest/coverage-v8": "latest",
+    "jsdom": "latest",
     "tailwindcss": "latest",
     "typescript": "latest",
-    "vite": "latest"
+    "vite": "latest",
+    "vitest": "latest"
   }
 }

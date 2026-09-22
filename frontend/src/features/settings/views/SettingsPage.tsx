@@ -1,0 +1,40 @@
+import {useEffect, useState} from "react";
+import {FloppyDisk, Palette, PencilSimple, Plus, ShieldCheck, SlidersHorizontal, Trash} from "@phosphor-icons/react";
+import {Link} from "react-router-dom";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {api} from "../../../shared/lib/api";
+import {RoleSettingsCard} from "../components/RoleSettingsCard";
+import {TestCatalogCard} from "../components/TestCatalogCard";
+import {PageHeader} from "../../../shared/components/layout/AppShell";
+import {WorkspaceState} from "../../workspace/WorkspaceState";
+import {useWorkspace} from "../../workspace/WorkspaceContext";
+import {Button} from "../../../shared/components/ui/button";
+import {Card, CardContent, CardHeader, CardTitle} from "../../../shared/components/ui/card";
+import {Input} from "../../../shared/components/ui/input";
+import {Label} from "../../../shared/components/ui/label";
+import type {AthleticTest, RoleDefinition, Skill, Team} from "../../../shared/types";
+
+export function SettingsPage() {
+    const {selectedTeam} = useWorkspace();
+    const queryClient = useQueryClient();
+    const [name, setName] = useState(selectedTeam?.name ?? "");
+    const [season, setSeason] = useState(selectedTeam?.season ?? "");
+    useEffect(() => { setName(selectedTeam?.name ?? ""); setSeason(selectedTeam?.season ?? ""); }, [selectedTeam]);
+    const skillsQuery = useQuery({queryKey: ["skills", selectedTeam?.id], queryFn: () => api.skills(selectedTeam!.id), enabled: Boolean(selectedTeam)});
+    const rolesQuery = useQuery({queryKey: ["roles", selectedTeam?.id], queryFn: () => api.roles(selectedTeam!.id), enabled: Boolean(selectedTeam)});
+    const testsQuery = useQuery({queryKey: ["athletic-tests", selectedTeam?.id], queryFn: () => api.athleticTests(selectedTeam!.id), enabled: Boolean(selectedTeam)});
+    const saveMutation = useMutation({mutationFn: () => api.updateTeam(selectedTeam!.id, {name, season}), onSuccess: (team) => queryClient.setQueryData<Team[]>(["teams"], (teams) => teams?.map((item) => item.id === team.id ? team : item))});
+    const archiveSkill = useMutation({mutationFn: (skill: Skill) => api.archiveSkill(selectedTeam!.id, skill.id), onSuccess: () => queryClient.invalidateQueries({queryKey: ["skills", selectedTeam?.id]})});
+    const archiveRole = useMutation({mutationFn: (role: RoleDefinition) => api.archiveRole(selectedTeam!.id, role.id), onSuccess: () => queryClient.invalidateQueries({queryKey: ["roles", selectedTeam?.id]})});
+    const archiveTest = useMutation({mutationFn: (test: AthleticTest) => api.archiveAthleticTest(selectedTeam!.id, test.id), onSuccess: () => queryClient.invalidateQueries({queryKey: ["athletic-tests", selectedTeam?.id]})});
+    const roles = rolesQuery.data ?? [];
+
+    return <WorkspaceState><PageHeader eyebrow="Workspace / settings" title="Settings" description="Manage the team context, role framework, skill framework, test catalog, and work preferences."/><div className="settings-grid">
+        <Card><CardHeader><div className="settings-title"><div className="settings-icon"><SlidersHorizontal size={19}/></div><div><p className="eyebrow">Active team</p><CardTitle>Team identity</CardTitle></div></div></CardHeader><CardContent><div className="form-stack"><div><Label htmlFor="settings-name">Team name</Label><Input id="settings-name" value={name} onChange={(event) => setName(event.target.value)}/></div><div><Label htmlFor="settings-season">Season</Label><Input id="settings-season" value={season} onChange={(event) => setSeason(event.target.value)}/></div><Button variant="accent" onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending || !name.trim() || !season.trim()}><FloppyDisk size={17}/>{saveMutation.isPending ? "Saving…" : "Save changes"}</Button>{saveMutation.isSuccess && <p className="success-copy">Changes saved.</p>}</div></CardContent></Card>
+        <Card><CardHeader><div className="settings-title"><div className="settings-icon green"><ShieldCheck size={19}/></div><div><p className="eyebrow">Account</p><CardTitle>Access and security</CardTitle></div></div></CardHeader><CardContent><div className="settings-list"><div><strong>Provider</strong><span>Clerk Authentication</span></div><div><strong>Access model</strong><span>One account, separate teams</span></div><div><strong>Authorization</strong><span>API scoped by owner and team</span></div></div><p className="card-copy settings-note">The API verifies the session. Password, MFA, and session settings remain managed by Clerk.</p></CardContent></Card>
+        {rolesQuery.isLoading ? <Card className="settings-wide"><CardContent><div className="content-loading compact"><div className="loading-orb"/><p>Loading role framework…</p></div></CardContent></Card> : rolesQuery.error ? <Card className="settings-wide"><CardContent><p className="field-error">{(rolesQuery.error as Error).message}</p></CardContent></Card> : <><RoleSettingsCard roleType="primary" roles={roles.filter((role) => role.role_type === "primary")} onArchive={(role) => archiveRole.mutate(role)} isArchiving={archiveRole.isPending}/><RoleSettingsCard roleType="zone_defense" roles={roles.filter((role) => role.role_type === "zone_defense")} onArchive={(role) => archiveRole.mutate(role)} isArchiving={archiveRole.isPending}/></>}
+        {testsQuery.isLoading ? <Card className="settings-wide"><CardContent><div className="content-loading compact"><div className="loading-orb"/><p>Loading test catalog…</p></div></CardContent></Card> : testsQuery.error ? <Card className="settings-wide"><CardContent><p className="field-error">{(testsQuery.error as Error).message}</p></CardContent></Card> : <TestCatalogCard tests={testsQuery.data ?? []} onArchive={(test) => archiveTest.mutate(test)} isArchiving={archiveTest.isPending}/>}
+        <Card className="settings-wide skill-framework-card"><CardHeader><div className="card-heading-row"><div className="settings-title"><div className="settings-icon orange"><SlidersHorizontal size={19}/></div><div><p className="eyebrow">Skill framework</p><CardTitle>Configurable assessment parameters</CardTitle></div></div><Link className="page-action-link page-action-link-small" to="/settings/skills/new"><Plus size={17}/>Add skill</Link></div></CardHeader><CardContent><p className="card-copy">Coaches can add, edit, or archive the parameters used in player assessments. Archived parameters stay in historical records.</p>{skillsQuery.isLoading ? <div className="content-loading compact"><div className="loading-orb"/><p>Loading skill framework…</p></div> : <div className="skill-settings-list">{skillsQuery.data?.map((skill) => <div className={`skill-setting-row${skill.is_active ? "" : " archived"}`} key={skill.id}><div><strong>{skill.name}</strong><span>{skill.category === "attack" ? "Attack" : "Defense"} · {skill.description || "No description"}</span></div><div className="skill-setting-actions">{!skill.is_active && <span className="preference-pill">Archived</span>}<Link aria-label={`Edit ${skill.name}`} className="icon-link" to={`/settings/skills/${skill.id}/edit`}><PencilSimple size={17}/></Link>{skill.is_active && <Button aria-label={`Archive ${skill.name}`} variant="ghost" size="icon" onClick={() => archiveSkill.mutate(skill)}><Trash size={17}/></Button>}</div></div>)}</div>}</CardContent></Card>
+        <Card className="settings-wide"><CardHeader><div className="settings-title"><div className="settings-icon orange"><Palette size={19}/></div><div><p className="eyebrow">Interface</p><CardTitle>Visual preferences</CardTitle></div></div></CardHeader><CardContent><div className="preference-row"><div><strong>Sidebar</strong><span>Use the control at the top to expand or collapse navigation. The preference is remembered on this device.</span></div><span className="preference-pill">Responsive</span></div><div className="preference-row"><div><strong>Style</strong><span>Light surfaces, editorial typography, and an orange accent keep staff work in focus.</span></div><span className="preference-pill">Drillr light</span></div></CardContent></Card>
+    </div></WorkspaceState>;
+}

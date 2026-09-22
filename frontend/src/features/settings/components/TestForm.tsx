@@ -1,0 +1,20 @@
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useEffect} from "react";
+import {useForm} from "react-hook-form";
+import {z} from "zod";
+import {Button} from "../../../shared/components/ui/button";
+import {Card, CardContent, CardHeader, CardTitle} from "../../../shared/components/ui/card";
+import {Input} from "../../../shared/components/ui/input";
+import {Label} from "../../../shared/components/ui/label";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../../../shared/components/ui/select";
+import type {AthleticTest, AthleticTestType} from "../../../shared/types";
+
+const schema = z.object({name: z.string().trim().min(1, "Test name is required"), category: z.string().trim().min(1, "Category is required"), test_type: z.enum(["athletic", "technical"]), unit: z.string().trim().min(1, "Unit is required"), direction: z.enum(["higher_is_better", "lower_is_better", "target_range"]), sort_order: z.coerce.number().int().min(0).max(999)});
+type FormValues = z.output<typeof schema>;
+
+export function TestForm({test, onSubmit, onCancel}: {test?: AthleticTest; onSubmit: (input: FormValues) => Promise<void>; onCancel: () => void}) {
+    const form = useForm<z.input<typeof schema>, unknown, FormValues>({resolver: zodResolver(schema), defaultValues: {name: "", category: "", test_type: "athletic", unit: "", direction: "higher_is_better", sort_order: 0}});
+    useEffect(() => { form.reset(test ? {name: test.name, category: test.category, test_type: test.test_type, unit: test.unit, direction: test.direction, sort_order: test.sort_order} : {name: "", category: "", test_type: "athletic", unit: "", direction: "higher_is_better", sort_order: 0}); }, [test, form]);
+    const submit = form.handleSubmit(async (values) => onSubmit(values));
+    return <Card className="profile-form"><CardHeader><p className="eyebrow">Test catalog</p><CardTitle>{test ? "Edit test" : "Add test"}</CardTitle></CardHeader><CardContent><form className="form-stack" onSubmit={submit}><div className="form-grid"><div><Label htmlFor="test-name">Name</Label><Input id="test-name" autoFocus {...form.register("name")}/>{form.formState.errors.name && <p className="field-error">{form.formState.errors.name.message}</p>}</div><div><Label htmlFor="test-category">Category</Label><Input id="test-category" {...form.register("category")}/>{form.formState.errors.category && <p className="field-error">{form.formState.errors.category.message}</p>}</div></div><div className="form-grid"><div><Label htmlFor="test-type">Type</Label><Select value={form.watch("test_type")} onValueChange={(value) => form.setValue("test_type", value as AthleticTestType, {shouldValidate: true})}><SelectTrigger id="test-type" className="field-select-box"><SelectValue/></SelectTrigger><SelectContent><SelectItem value="athletic">Athletic</SelectItem><SelectItem value="technical">Technical / non-athletic</SelectItem></SelectContent></Select></div><div><Label htmlFor="test-unit">Unit</Label><Input id="test-unit" placeholder="cm, s, points…" {...form.register("unit")}/>{form.formState.errors.unit && <p className="field-error">{form.formState.errors.unit.message}</p>}</div></div><div className="form-grid"><div><Label htmlFor="test-direction">Direction</Label><Select value={form.watch("direction")} onValueChange={(value) => form.setValue("direction", value as FormValues["direction"], {shouldValidate: true})}><SelectTrigger id="test-direction" className="field-select-box"><SelectValue/></SelectTrigger><SelectContent><SelectItem value="higher_is_better">Higher is better</SelectItem><SelectItem value="lower_is_better">Lower is better</SelectItem><SelectItem value="target_range">Target range</SelectItem></SelectContent></Select></div><div><Label htmlFor="test-order">Order</Label><Input id="test-order" type="number" min="0" {...form.register("sort_order")}/></div></div><div className="form-actions"><Button type="button" variant="ghost" onClick={onCancel}>Cancel</Button><Button type="submit" variant="accent" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting ? "Saving…" : "Save test"}</Button></div></form></CardContent></Card>;
+}
